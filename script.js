@@ -1,5 +1,5 @@
 // ===================================
-// PORTFOLIO APP - MAIN JAVASCRIPT
+// PORTFOLIO APP - ENHANCED JAVASCRIPT
 // ===================================
 
 'use strict';
@@ -47,6 +47,25 @@ if (mobileMenu && navLinks) {
         }
     });
 }
+
+// ===================================
+// DROPDOWN MENU FUNCTIONALITY
+// ===================================
+const dropdownMenus = document.querySelectorAll('.nav-more');
+
+dropdownMenus.forEach(menu => {
+    const trigger = menu.querySelector('.more-trigger');
+    const dropdown = menu.querySelector('.dropdown-menu');
+    
+    if (trigger && dropdown) {
+        // Close dropdown when clicking a link inside it
+        dropdown.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                // Smooth scroll will be handled by the main smooth scroll handler
+            });
+        });
+    }
+});
 
 // ===================================
 // SMOOTH SCROLL FOR NAVIGATION
@@ -217,22 +236,24 @@ languageProgress.forEach(item => {
 });
 
 // ===================================
-// FOOD CARDS ANIMATION
+// ANIMATED CARDS ON SCROLL
 // ===================================
-const foodObserver = new IntersectionObserver((entries) => {
+const cardObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry, index) => {
         if (entry.isIntersecting) {
             setTimeout(() => {
+                entry.target.style.setProperty('--i', index + 1);
                 entry.target.style.animationDelay = `${index * 0.1}s`;
             }, index * 50);
-            foodObserver.unobserve(entry.target);
+            cardObserver.unobserve(entry.target);
         }
     });
 }, { threshold: 0.1 });
 
-const foodCards = document.querySelectorAll('.food-card');
-foodCards.forEach(card => {
-    foodObserver.observe(card);
+// Apply to food cards, game cards, passion cards, etc.
+const animatedCards = document.querySelectorAll('.food-card, .game-card, .passion-card, .dream-item, .value-card, .hobby-card');
+animatedCards.forEach(card => {
+    cardObserver.observe(card);
 });
 
 // ===================================
@@ -276,7 +297,7 @@ scrollToTopBtn.addEventListener('click', (e) => {
 });
 
 scrollToTopBtn.addEventListener('mouseenter', () => {
-    scrollToTopBtn.style.transform = 'scale(1.1)';
+    scrollToTopBtn.style.transform = 'scale(1.15) translateY(-5px)';
 });
 
 scrollToTopBtn.addEventListener('mouseleave', () => {
@@ -351,13 +372,15 @@ const observeCards = new IntersectionObserver((entries) => {
 }, { threshold: 0.1 });
 
 const cards = document.querySelectorAll(
-    '.passion-card, .dream-item, .value-card, .skill-card:not(.animated)'
+    '.skill-card:not(.animated), .routine-card, .family-card, .info-row'
 );
 
 cards.forEach(card => {
-    card.style.opacity = '0';
-    card.style.transform = 'translateY(30px)';
-    card.style.transition = 'all 0.6s ease';
+    if (!card.style.opacity) {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        card.style.transition = 'all 0.6s ease';
+    }
     observeCards.observe(card);
 });
 
@@ -456,6 +479,18 @@ if (window.performance && performance.navigation.type === 1) {
 } else {
     console.log('%cPage loaded successfully ✓', 'color: #00D26A');
 }
+
+// ===================================
+// PARALLAX EFFECT ON SCROLL
+// ===================================
+window.addEventListener('scroll', () => {
+    const scrolled = window.pageYOffset;
+    const parallaxElements = document.querySelectorAll('.hero::before');
+    
+    parallaxElements.forEach(el => {
+        el.style.transform = `translateY(${scrolled * 0.5}px)`;
+    });
+}, { passive: true });
 
 // ===================================
 // END OF SCRIPT
