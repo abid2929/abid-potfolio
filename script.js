@@ -496,3 +496,36 @@ window.addEventListener('scroll', () => {
 // END OF SCRIPT
 // ===================================
 console.log('%c✓ All scripts loaded successfully', 'color: #00D26A; font-weight: bold;');
+
+
+
+// ===================================
+// TRAVEL SECTION ANIMATION
+// ===================================
+const travelObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const placeCards = entry.target.querySelectorAll('.place-card');
+            
+            placeCards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+            
+            travelObserver.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.1 });
+
+const travelSection = document.querySelector('.travel');
+if (travelSection) {
+    const travelCards = travelSection.querySelectorAll('.place-card');
+    travelCards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        card.style.transition = 'all 0.6s ease';
+    });
+    travelObserver.observe(travelSection);
+}
